@@ -30,21 +30,29 @@ class ProfilController extends Controller
     // Endpoint protégé (POST /profils)
     public function store(StoreProfilRequest $request) // Utilise la FormRequest
     {
-        $profil = $this->profilService->createProfil($request->validated(), Auth::user());
-        return new ProfilResource($profil);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $profil = $this->profilService->createProfil($request->validated(),$user);
+        return response()->json([
+            'data' => new ProfilResource($profil),
+        ], 201);
     }
 
     // Endpoint protégé (GET /profils/{profil}). Pour voir un profil avec son statut
     public function show(Profil $profil)
     {
-        return new ProfilResource($profil->load('commentaires'));
+        return response()->json([
+            'data' => new ProfilResource($profil->load('commentaires')),
+        ]);
     }
 
     // Endpoint protégé (PUT /profils/{profil})
     public function update(UpdateProfilRequest $request, Profil $profil)
     {
         $updatedProfil = $this->profilService->updateProfil($profil, $request->validated());
-        return new ProfilResource($updatedProfil);
+        return response()->json([
+            'data' => new ProfilResource($updatedProfil),
+        ]);
     }
 
     // Endpoint protégé (DELETE /profils/{profil})

@@ -25,11 +25,12 @@ class CommentaireController extends Controller
         // La contrainte "Un administrateur ne peut poster qu'un commentaire sur un profil"
         // est gérée par la clé unique en DB.
         // je fais en sorte que la  FormRequest valide aussi que le profil existe.
-
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
         $commentaire = $this->commentaireService->createCommentaire(
             $request->validated(),
             $profil,
-            Auth::user()
+            $user
         );
         return new CommentaireResource($commentaire);
     }
