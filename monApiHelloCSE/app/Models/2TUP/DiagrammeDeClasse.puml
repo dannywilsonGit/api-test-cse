@@ -1,0 +1,90 @@
+@startuml
+!pragma useVerticalIf on
+skinparam line type ortho
+skinparam packageStyle rectangle
+left to right direction
+
+' ==== Énumérations ====
+enum StatutProfil {
+    INACTIF = "inactif"
+    EN_ATTENTE = "en attente"
+    ACTIF = "actif"
+}
+
+' ==== Entités Principales ====
+class Administrateur {
+    + id
+    + name
+    + email
+    + password (hidden)
+    + remember_token (hidden)
+    + created_at
+    + updated_at
+    --
+    + api_token (Sanctum)
+}
+
+class Profil {
+    + id
+    + admin_id (FK)
+    + nom
+    + prenom
+    + image : fichier
+    + statut : StatutProfil
+    + created_at
+    + updated_at
+}
+
+class Commentaire {
+    + id
+    + admin_id (FK)
+    + profil_id (FK)
+    + contenu : text
+    + created_at
+    + updated_at
+}
+
+' ==== Relations ====
+Administrateur "1" -- "n" Profil : crée >
+Administrateur "1" -- "n" Commentaire : poste >
+Profil "1" -- "n" Commentaire : contient >
+
+' ==== Endpoints ====
+class API {
+    + POST /api/profils (protégé)
+    + POST /api/profils/{id}/commentaires (protégé)
+    + GET /api/profils/public (public)
+    + GET /api/profils/{id}(protégé)(show)
+    + PUT /api/profils/{id} (protégé)
+    + DELETE /api/profils/{id} (protégé)
+}
+
+' ==== Flux ====
+API --> Profil : CRUD
+API --> Commentaire : Create/Read
+Administrateur --> API : Authentification\n(Sanctum)
+
+' ==== Notes ====
+note top of Administrateur
+    Authentification:
+    (User dans mon code)
+    - Laravel Sanctum
+    - API Tokens
+    - Middleware 'auth:sanctum'
+end note
+
+note right of Profil
+    Validation:
+    - FormRequest
+    - Statut enuméré
+    - Image upload
+    - Unicité admin+commentaire
+end note
+
+note bottom of Commentaire
+    Contraintes:
+    - 1 commentaire/admin/profil
+    - Contenu validé
+end note
+
+@enduml
