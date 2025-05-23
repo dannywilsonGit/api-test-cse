@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profil;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Resources\ProfilResource;
 use App\Http\Resources\PublicProfilResource;
 use App\Services\ProfilService;
 use App\Http\Requests\StoreProfilRequest;
 use App\Http\Requests\UpdateProfilRequest;
+
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
 class ProfilController extends Controller
@@ -21,14 +23,14 @@ class ProfilController extends Controller
     }
 
     // Endpoint public (GET /profils/public)
-    public function indexPublic()
+    public function indexPublic(): JsonResource
     {
         $profils = $this->profilService->getActivePublicProfils();
         return PublicProfilResource::collection($profils);
     }
 
     // Endpoint protégé (POST /profils)
-    public function store(StoreProfilRequest $request) // Utilise la FormRequest
+    public function store(StoreProfilRequest $request):JsonResponse // Utilise la FormRequest
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
@@ -39,7 +41,7 @@ class ProfilController extends Controller
     }
 
     // Endpoint protégé (GET /profils/{profil}). Pour voir un profil avec son statut
-    public function show(Profil $profil)
+    public function show(Profil $profil):JsonResponse
     {
         return response()->json([
             'data' => new ProfilResource($profil->load('commentaires')),
@@ -47,7 +49,7 @@ class ProfilController extends Controller
     }
 
     // Endpoint protégé (PUT /profils/{profil})
-    public function update(UpdateProfilRequest $request, Profil $profil)
+    public function update(UpdateProfilRequest $request, Profil $profil):JsonResponse
     {
         $updatedProfil = $this->profilService->updateProfil($profil, $request->validated());
         return response()->json([
@@ -56,7 +58,7 @@ class ProfilController extends Controller
     }
 
     // Endpoint protégé (DELETE /profils/{profil})
-    public function destroy(Profil $profil)
+    public function destroy(Profil $profil):JsonResponse
     {
 
         $this->profilService->deleteProfil($profil);

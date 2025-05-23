@@ -7,11 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-enum StatutProfil: string {
-     case INACTIF = 'inactif';
-     case EN_ATTENTE = 'en attente';
-     case ACTIF = 'actif';
- }
+
+
+
 class Profil extends Model
 {
     /** @use HasFactory<\Database\Factories\ProfilFactory> */
@@ -26,14 +24,17 @@ class Profil extends Model
     ];
 
 
-     protected $casts = [
-         'statut' => StatutProfil::class,
-     ];
-
+    /**
+     * @return BelongsTo<User, Profil>
+     */
     public function administrateur(): BelongsTo
     {
         return $this->belongsTo(User::class, 'admin_id');
     }
+
+    /**
+     * @return HasMany<Commentaire, Profil>
+     */
 
     public function commentaires(): HasMany
     {

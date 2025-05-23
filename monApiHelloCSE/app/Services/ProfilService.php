@@ -2,18 +2,26 @@
 
 namespace App\Services;
 
-use App\Models\Profil;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\Profil;
 
 class ProfilService
 {
+    /**
+     * @return Collection<int, Profil>
+     */
     public function getActivePublicProfils(): Collection
     {
         return Profil::where('statut', 'actif')->with('commentaires')->get();
     }
 
+
+    /**
+     * @param array{nom: string, prenom: string, image?: \Illuminate\Http\UploadedFile|null, statut: string} $data
+     */
     public function createProfil(array $data, User $admin): Profil
     {
         $data['admin_id'] = $admin->id;
@@ -26,6 +34,9 @@ class ProfilService
         return Profil::create($data);
     }
 
+    /**
+     * @param array{nom?: string, prenom?: string, image?: \Illuminate\Http\UploadedFile|null, statut?: string} $data
+     */
     public function updateProfil(Profil $profil, array $data): Profil
     {
         if (isset($data['image'])) {

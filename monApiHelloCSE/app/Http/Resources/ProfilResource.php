@@ -2,15 +2,41 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Profil;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
+
+
+/**
+ * @mixin Profil
+ * @return array<string, mixed>
+ */
 
 class ProfilResource extends JsonResource
 {
     public static $wrap = 'profil';// enveloppe la ressource
 
+    /**
+     * Transform the resource into an array.
+     *
+     * @phpstan-return array{
+     *     id: int,
+     *     nom: string,
+     *     prenom: string,
+     *     image_url: string|null,
+     *     admin_id_createur: int,
+     *     created_at: string,
+     *     updated_at: string,
+     *     commentaires: AnonymousResourceCollection,
+     *     statut?: string
+     * }
+     */
+
     public function toArray(Request $request): array
     {
+
+
         $data = [
             'id' => $this->id,
             'nom' => $this->nom,

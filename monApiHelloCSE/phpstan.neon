@@ -1,0 +1,22 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    level: 6
+    paths:
+        - app/
+        - config/
+        - database/factories/
+        - database/seeders/
+        - routes/
+        - tests/
+
+
+
+    reportUnmatchedIgnoredErrors: true
+
+    excludePaths:
+        - %currentWorkingDirectory%/vendor/
+        - %currentWorkingDirectory%/storage/
+        - %currentWorkingDirectory%/bootstrap/cache/

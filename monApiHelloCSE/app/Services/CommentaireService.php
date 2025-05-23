@@ -10,8 +10,13 @@ use Illuminate\Support\Facades\DB; // Pour la gestion d'erreur de la contrainte 
 use Illuminate\Validation\ValidationException;
 
 
+
 class CommentaireService
 {
+
+    /**
+     * @param array{contenu: string} $data
+     */
     public function createCommentaire(array $data, Profil $profil, User $admin): Commentaire
     {
         $data['admin_id'] = $admin->id;
