@@ -12,8 +12,6 @@ parameters:
         - routes/
         - tests/
 
-
-
     reportUnmatchedIgnoredErrors: true
 
     excludePaths:
