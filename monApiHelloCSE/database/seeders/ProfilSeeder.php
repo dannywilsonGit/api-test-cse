@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Profil;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class ProfilSeeder extends Seeder
 {
@@ -13,14 +14,25 @@ class ProfilSeeder extends Seeder
      */
     public function run(): void
     {
-        //On va créer au moins un seeder de profil
+
+        // Création d'un dossier temporaire pour les images
+        if (!Storage::exists('public/profils')) {
+            Storage::makeDirectory('public/profils');
+        }
+
+        //On va créer au moins un seeder de profil actif
         Profil::factory()->create([
             'admin_id' => 1,
             'nom' => 'Profil Test',
             'prenom' => 'Test',
-            'image' => null,
+            'image' => $this->generateFakeImage(),
             'statut'=>'actif'
         ]);
 
+    }
+
+    private function generateFakeImage(): string
+    {
+        return 'profils/default.jpg';
     }
 }

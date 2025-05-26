@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             ProfilSeeder::class,
+            CommentaireSeeder::class
         ]);
     }
 
