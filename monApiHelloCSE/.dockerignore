@@ -1,0 +1,29 @@
+# Fichiers système
+.git/
+.dockerignore
+.gitignore
+.idea/
+.vscode/
+*.md
+*.pdf
+
+# Fichiers environnement
+.env
+.env.example
+.env.testing
+
+# Dépendances installées automatiquement par le conteneur
+/vendor/
+/node_modules/
+
+# Dossiers de stockage et cache
+/storage/*
+!storage/framework/
+!storage/logs/
+/bootstrap/cache/
+
+# Fichiers build frontend
+/public/css/
+/public/js/
+/public/hot
+/public/storage
