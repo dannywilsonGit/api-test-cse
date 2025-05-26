@@ -4,13 +4,19 @@ FROM php:8.2-apache
 RUN apt-get update && \
     apt-get install -y \
     libzip-dev \
-    zip
+    zip  \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev
+
 
 # Enable mod_rewrite
 RUN a2enmod rewrite
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql zip
+RUN docker-php-ext-install pdo_mysql zip  \
+&& docker-php-ext-configure gd --with-freetype --with-jpeg \
+&& docker-php-ext-install gd
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
